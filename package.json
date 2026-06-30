@@ -1,0 +1,9 @@
+{
+  "name": "chem-lab-notebook",
+  "version": "1.0.0",
+  "description": "YouTube chemistry video summarizer",
+  "private": true,
+  "dependencies": {
+    "youtube-transcript": "^1.2.1"
+  }
+}
