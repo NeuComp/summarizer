@@ -1,0 +1,11 @@
+{
+  "name": "Lab Notebook — Chemistry Video Summarizer",
+  "short_name": "Lab Notebook",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f6f0",
+  "theme_color": "#f5f6f0",
+  "icons": [
+    { "src": "icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

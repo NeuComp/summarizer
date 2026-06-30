@@ -1,125 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Lab Notebook — Chemistry Video Summarizer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Serif:wght@400;500;600&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lab Notebook — Chemistry Video Summarizer</title>
 
+<!-- iOS: launch as standalone app from the home screen, no Safari chrome -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lab Notebook">
+<meta name="theme-color" content="#f5f6f0">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Serif:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
 <body>
 
-    <header class="masthead">
-        <div class="masthead-row">
-            <div class="brand">
-                <span class="brand-mark">⚗</span>
-                <div>
-                    <h1>Lab Notebook</h1>
-                    <p class="brand-sub">Chemistry video notes, distilled</p>
-                </div>
-            </div>
-            <button id="archiveToggle" class="archive-toggle" aria-expanded="false" aria-controls="archivePanel">
-                <span class="archive-count" id="archiveCount">0</span> Archive
-            </button>
-        </div>
-    </header>
+<header class="masthead">
+  <div class="masthead-row">
+    <div class="brand">
+      <span class="brand-mark">⚗</span>
+      <div>
+        <h1>Lab Notebook</h1>
+        <p class="brand-sub">Chemistry video notes, distilled</p>
+      </div>
+    </div>
+    <button id="archiveToggle" class="archive-toggle" aria-expanded="false" aria-controls="archivePanel">
+      <span class="archive-count" id="archiveCount">0</span> Archive
+    </button>
+  </div>
+</header>
 
-    <main>
+<main>
 
-        <section class="slip" aria-label="Submit a video">
-            <div class="slip-head">
-                <span class="slip-eyebrow">Sample Intake</span>
-                <span class="slip-id" id="slipDate"></span>
-            </div>
-            <form id="summarizeForm" class="slip-form">
-                <label for="videoUrl">YouTube link</label>
-                <input type="url" id="videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=..."
-                    required inputmode="url" autocomplete="off">
-                <button type="submit" id="submitBtn" class="stamp-btn">
-                    <span class="stamp-text">Analyze Sample</span>
-                </button>
-            </form>
-            <p class="slip-error" id="formError" hidden></p>
-        </section>
+  <section class="slip" aria-label="Submit a video">
+    <div class="slip-head">
+      <span class="slip-eyebrow">Sample Intake</span>
+      <span class="slip-id" id="slipDate"></span>
+    </div>
+    <form id="summarizeForm" class="slip-form">
+      <label for="videoUrl">YouTube link</label>
+      <input
+        type="url"
+        id="videoUrl"
+        name="videoUrl"
+        placeholder="https://www.youtube.com/watch?v=..."
+        required
+        inputmode="url"
+        autocomplete="off"
+      >
+      <button type="submit" id="submitBtn" class="stamp-btn">
+        <span class="stamp-text">Analyze Sample</span>
+      </button>
+    </form>
+    <p class="slip-error" id="formError" hidden></p>
+  </section>
 
-        <section id="loadingState" class="loading" hidden>
-            <svg class="atom-spinner" viewBox="0 0 100 100" aria-hidden="true">
-                <circle cx="50" cy="50" r="4" class="nucleus" />
-                <ellipse cx="50" cy="50" rx="40" ry="16" class="orbit orbit-1" />
-                <ellipse cx="50" cy="50" rx="40" ry="16" class="orbit orbit-2" />
-                <ellipse cx="50" cy="50" rx="40" ry="16" class="orbit orbit-3" />
-                <circle r="3" class="electron electron-1" />
-                <circle r="3" class="electron electron-2" />
-                <circle r="3" class="electron electron-3" />
-            </svg>
-            <p id="loadingText">Pulling the transcript…</p>
-        </section>
+  <section id="loadingState" class="loading" hidden>
+    <svg class="atom-spinner" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="4" class="nucleus"/>
+      <ellipse cx="50" cy="50" rx="40" ry="16" class="orbit orbit-1"/>
+      <ellipse cx="50" cy="50" rx="40" ry="16" class="orbit orbit-2"/>
+      <ellipse cx="50" cy="50" rx="40" ry="16" class="orbit orbit-3"/>
+      <circle r="3" class="electron electron-1"/>
+      <circle r="3" class="electron electron-2"/>
+      <circle r="3" class="electron electron-3"/>
+    </svg>
+    <p id="loadingText">Pulling the transcript…</p>
+  </section>
 
-        <section id="report" class="report" hidden>
+  <section id="report" class="report" hidden>
 
-            <div class="report-header">
-                <img id="reportThumb" class="report-thumb" alt="">
-                <div>
-                    <span class="report-eyebrow">Observation Log</span>
-                    <h2 id="reportTopic"></h2>
-                    <p id="reportTitle" class="report-video-title"></p>
-                </div>
-                <button id="saveBtn" class="save-btn" type="button">
-                    <span id="saveIcon">☆</span> <span id="saveLabel">Save to archive</span>
-                </button>
-            </div>
+    <div class="report-header">
+      <img id="reportThumb" class="report-thumb" alt="">
+      <div>
+        <span class="report-eyebrow">Observation Log</span>
+        <h2 id="reportTopic"></h2>
+        <p id="reportTitle" class="report-video-title"></p>
+      </div>
+      <button id="saveBtn" class="save-btn" type="button">
+        <span id="saveIcon">☆</span> <span id="saveLabel">Save to archive</span>
+      </button>
+    </div>
 
-            <p id="truncatedNote" class="truncated-note" hidden>
-                Heads up — this video's transcript was long, so the summary covers the first portion only.
-            </p>
+    <p id="truncatedNote" class="truncated-note" hidden>
+      Heads up — this video's transcript was long, so the summary covers the first portion only.
+    </p>
 
-            <div class="report-block">
-                <h3 class="block-label">01 — Key Concepts</h3>
-                <div id="tileGrid" class="tile-grid"></div>
-            </div>
+    <div class="report-block">
+      <h3 class="block-label">01 — Key Concepts</h3>
+      <div id="tileGrid" class="tile-grid"></div>
+    </div>
 
-            <div class="report-block">
-                <h3 class="block-label">02 — Summary</h3>
-                <div id="summaryText" class="summary-text"></div>
-            </div>
+    <div class="report-block">
+      <h3 class="block-label">02 — Summary</h3>
+      <div id="summaryText" class="summary-text"></div>
+    </div>
 
-            <div class="report-block">
-                <h3 class="block-label">03 — How It Connects</h3>
-                <ul id="connectionsList" class="connections-list"></ul>
-            </div>
+    <div class="report-block">
+      <h3 class="block-label">03 — How It Connects</h3>
+      <ul id="connectionsList" class="connections-list"></ul>
+    </div>
 
-            <div class="report-block">
-                <h3 class="block-label">04 — Don't Forget</h3>
-                <div class="margin-note">
-                    <ul id="notesList" class="notes-list"></ul>
-                </div>
-            </div>
+    <div class="report-block">
+      <h3 class="block-label">04 — Don't Forget</h3>
+      <div class="margin-note">
+        <ul id="notesList" class="notes-list"></ul>
+      </div>
+    </div>
 
-        </section>
+  </section>
 
-        <section id="emptyState" class="empty-state">
-            <p>Paste a chemistry video link above to get a structured summary, key terms, and how everything connects.
-            </p>
-        </section>
+  <section id="emptyState" class="empty-state">
+    <p>Paste a chemistry video link above to get a structured summary, key terms, and how everything connects.</p>
+  </section>
 
-    </main>
+</main>
 
-    <aside id="archivePanel" class="archive-panel" aria-hidden="true">
-        <div class="archive-panel-head">
-            <h2>Notebook Archive</h2>
-            <button id="archiveClose" class="archive-close" aria-label="Close archive">✕</button>
-        </div>
-        <div id="archiveList" class="archive-list"></div>
-        <p id="archiveEmpty" class="archive-empty">No saved summaries yet.</p>
-    </aside>
-    <div id="archiveScrim" class="archive-scrim" hidden></div>
+<aside id="archivePanel" class="archive-panel" aria-hidden="true">
+  <div class="archive-panel-head">
+    <h2>Notebook Archive</h2>
+    <button id="archiveClose" class="archive-close" aria-label="Close archive">✕</button>
+  </div>
+  <div id="archiveList" class="archive-list"></div>
+  <p id="archiveEmpty" class="archive-empty">No saved summaries yet.</p>
+</aside>
+<div id="archiveScrim" class="archive-scrim" hidden></div>
 
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
-
 </html>
